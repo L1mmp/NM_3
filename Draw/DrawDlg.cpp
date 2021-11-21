@@ -6,6 +6,7 @@
 #include "Draw.h"
 #include "DrawDlg.h"
 #include "afxdialogex.h"
+#include <fstream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -112,7 +113,7 @@ void CDrawDlg::OnBnClickedOk()
 
 	for (int i = 0; i < n; i++)
 	{
-		arrayX[i] = i * 2.0 / (n-1);
+		arrayX[i] = i * 2.0 / (n - 1);
 		arrayY[i] = sin(pow(arrayX[i], 3));
 	}
 
@@ -122,6 +123,19 @@ void CDrawDlg::OnBnClickedOk()
 		FInterpolyant_keys.push_back(x);
 		FInterpolyant.push_back(lagrange.GetValue(arrayX, arrayY, x, n));
 	}
+
+	ofstream fout;
+	fout.open("../result.txt");
+	int k = 30;
+
+	for (int i = 0; i < k+1; i++)
+	{
+		double x = i * 0.08;
+		double difference = sin(pow(x, 3)) - lagrange.GetValue(arrayX, arrayY, x, n);
+
+		fout << "X: " << x << '\t' << "f(" << x << ") - " << "F" << "(" << x << ") = " << difference << endl;
+	}
+	fout.close();
 
 	drv.DrawTwoFunctions(F, FInterpolyant, F_keys, FInterpolyant_keys);
 }
