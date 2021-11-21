@@ -33,5 +33,5 @@ protected:
 public:
 	afx_msg void OnBnClickedOk();
 	Drawer drv;
-	Drawer drv2;
+	//Drawer drv2;
 };

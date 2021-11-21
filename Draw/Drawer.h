@@ -222,7 +222,7 @@ public:
 		memDC.SelectObject(&data1_pen);
 
 		double data_y_max(2), data_y_min(-2);
-		double data_x_max(100), data_x_min(0);
+		double data_x_max(2), data_x_min(0);
 
 		vector<double> y1 = convert_range(data1, actual_top, actual_bottom, data_y_max, data_y_min);
 		vector<double> y2 = convert_range(data2, actual_top, actual_bottom, data_y_max, data_y_min);

@@ -47,7 +47,7 @@ BOOL CDrawDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Мелкий значок
 
 	drv.Create(GetDlgItem(IDC_PICTURE)->GetSafeHwnd());
-	drv2.Create(GetDlgItem(IDC_PICTURE2)->GetSafeHwnd());
+	//drv2.Create(GetDlgItem(IDC_PICTURE2)->GetSafeHwnd());
 
 	return TRUE;  // возврат значения TRUE, если фокус не передан элементу управления
 }
@@ -93,28 +93,35 @@ HCURSOR CDrawDlg::OnQueryDragIcon()
 void CDrawDlg::OnBnClickedOk()
 {
 	vector<double> F;
-
-	double arrayX[26];
-	double arrayY[26];
-
-	for (int i = 0; i < 26; i++)
-	{
-		arrayX[i] = i * 0.08;
-		arrayY[i] = sin(pow(arrayX[i], 3));
-	}
+	vector<double> F_keys;
 
 	LagrangeInterpolator lagrange;
 
 	vector<double> FInterpolyant;
+	vector<double> FInterpolyant_keys;
 	for (int i = 0; i < 1000; i++)
 	{
-		F.push_back(sin(pow(i, 3) * 3.14 / 2e5));
+		double x = i * 2.0 / 1000.0;
+		F.push_back(sin(pow(x, 3)));
+		F_keys.push_back(x);
 	}
 
-	for (double i = 30; i < 1000; i+=0.6)
+	double arrayX[100];
+	double arrayY[100];
+	int n = 10;
+
+	for (int i = 0; i < n; i++)
 	{
-		FInterpolyant.push_back(lagrange.GetValue(arrayX, arrayY, pow(i, 3) * 3.14 / 5e5/*pow(i, 3) / 100000, 26*/, 26));
+		arrayX[i] = i * 2.0 / (n-1);
+		arrayY[i] = sin(pow(arrayX[i], 3));
 	}
 
-	drv.DrawTwoFunctions(F, FInterpolyant);
+	for (int i = 0; i < 1000; i++)
+	{
+		double x = i * 2.0 / 1000.0;
+		FInterpolyant_keys.push_back(x);
+		FInterpolyant.push_back(lagrange.GetValue(arrayX, arrayY, x, n));
+	}
+
+	drv.DrawTwoFunctions(F, FInterpolyant, F_keys, FInterpolyant_keys);
 }
